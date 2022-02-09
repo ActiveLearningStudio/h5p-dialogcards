@@ -244,7 +244,7 @@ class Dialogcards extends H5P.EventDispatcher {
         }).click(() => {
           this.trigger('reset');
         }).appendTo($footer);
-        this.$retry.hover(function (event) {mouseEnter(self.$retry, self.params.retry)}, function () {mouseLeave(self.$retry)});
+        // this.$retry.hover(function (event) {mouseEnter(self.$retry, self.params.retry)}, function () {mouseLeave(self.$retry)});
 
         this.$progress = $('<div>', {
           'id': 'h5p-dialogcards-progress-' + Dialogcards.idCounter,
@@ -305,6 +305,7 @@ class Dialogcards extends H5P.EventDispatcher {
      * @returns {*|jQuery|HTMLElement} Card wrapper set
      */
     this.initCards = (cardIds) => {
+
       const initLoad = 2;
       this.cards = [];
       this.currentCardId = 0;
@@ -350,6 +351,34 @@ class Dialogcards extends H5P.EventDispatcher {
      * @param {boolean} turned - True, if card is turned.
      */
     this.handleCardTurned = (turned) => {
+      // const customEvent =H5P.externalDispatcher.createXAPIEventTemplate("consumed");
+      // if (customEvent.data.statement.object) {
+      //   customEvent.data.statement.object.definition["description"] = {
+      //     "en-US":"Dialog Cards Activity", //  this.contentData.metadata.title
+      //   };
+      //   customEvent.data.statement.object.definition["name"] ={
+      //     "en-US":"Dialog Cards Activity", //  this.contentData.metadata.title
+      //   };
+      //   customEvent.data.statement.object["objectType"] ="Activity";
+      //   customEvent.data.statement.object["id"] ="http://dev.currikistudio.org/h5p/embed"
+      //   this.trigger(customEvent);
+      // }
+
+      const customEventInteract =H5P.externalDispatcher.createXAPIEventTemplate("interacted");
+      if (customEventInteract.data.statement.object) {
+        customEventInteract.data.statement.object.definition["description"] = {
+          "en-US":"Dialog Cards Activity", //  this.contentData.metadata.title
+        };
+        customEventInteract.data.statement.object.definition["name"] ={
+          "en-US":"Dialog Cards Activity", //  this.contentData.metadata.title
+        };
+        customEventInteract.data.statement.object["objectType"] ="Activity";
+        customEventInteract.data.statement.object["id"] ="http://adlnet.gov/expapi/activities"
+        this.trigger(customEventInteract);
+      }
+
+      // var xAPIEvent = H5P.externalDispatcher.createXAPIEventTemplate("interacted");
+      // H5P.externalDispatcher.trigger(xAPIEvent);
       // a11y notification
       this.$cardSideAnnouncer.html(turned ? this.params.cardFrontLabel : this.params.cardBackLabel);
 
@@ -358,6 +387,19 @@ class Dialogcards extends H5P.EventDispatcher {
         if (this.$retry) {
           this.$retry.removeClass('h5p-dialogcards-disabled');
           this.truncateRetryButton();
+
+          const customEventComplete =H5P.externalDispatcher.createXAPIEventTemplate("completed");
+          if (customEventComplete.data.statement.object) {
+            customEventComplete.data.statement.object.definition["description"] = {
+              "en-US":"Dialog Cards Activity", //  this.contentData.metadata.title
+            };
+            customEventComplete.data.statement.object.definition["name"] ={
+              "en-US":"Dialog Cards Activity", //  this.contentData.metadata.title
+            };
+            customEventComplete.data.statement.object["objectType"] ="Activity";
+            customEventComplete.data.statement.object["id"] ="http://adlnet.gov/expapi/activities"
+            this.trigger(customEventComplete);
+          }
         }
       }
     };
