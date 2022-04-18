@@ -8,10 +8,11 @@ class CardManager {
    * @param {object} params Parameters from content type.
    * @param {number} contentId Id of content.
    * @param {object} callbacks Callbacks to parent.
+   * @param {object} parent object.
    */
-  constructor(params, contentId, callbacks) {
+  constructor(params, contentId, callbacks, parent) {
     this.params = params;
-    this.cardPool = new CardPool(params, contentId, callbacks);
+    this.cardPool = new CardPool(params, contentId, callbacks, parent);
 
     this.reset(params.cardPiles);
 

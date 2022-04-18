@@ -10,13 +10,15 @@ class Card {
    * @param {object} [callbacks] Callbacks.
    * @param {function} [callbacks.onCardSize] Call when card needs resize.
    * @param {function} [callbacks.onCardTurned] Call when card was turned.
+   * @param {object} parent object.
    */
-  constructor(card, params, id, contentId, callbacks={}) {
+  constructor(card, params, id, contentId, callbacks={}, parent) {
     this.card = card;
     this.params = params || {};
     this.id = id;
     this.contentId = contentId;
     this.callbacks = callbacks;
+    this.parent = parent;
 
     this.$cardWrapper = $('<div>', {
       'class': 'h5p-dialogcards-cardwrap',
@@ -317,7 +319,7 @@ class Card {
         this.addTipToCard($c, turned ? 'front' : 'back');
 
         if (typeof this.callbacks.onCardTurned === 'function') {
-          this.callbacks.onCardTurned(turned);
+          this.callbacks.onCardTurned(turned, this.parent);
         }
       }, 200);
 

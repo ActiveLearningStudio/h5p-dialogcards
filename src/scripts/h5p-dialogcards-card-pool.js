@@ -7,12 +7,14 @@ class CardPool {
    * @param {object} params Parameters from content type.
    * @param {number} contentId Id of content.
    * @param {object} callbacks Callbacks to main component.
+   * @param {object} parent object.
    */
-  constructor(params, contentId, callbacks) {
+  constructor(params, contentId, callbacks, parent) {
     this.params = params;
     this.contentId = contentId;
     this.callbacks = callbacks;
     this.cards = [];
+    this.parent = parent;
 
     this.params.dialogs.forEach((dialog, index) => {
       dialog.id = index;
@@ -60,7 +62,7 @@ class CardPool {
     }
 
     if (typeof this.cards[id] === 'number') {
-      this.cards[id] = new Card(this.params.dialogs[id], this.params, id, this.contentId, this.callbacks);
+      this.cards[id] = new Card(this.params.dialogs[id], this.params, id, this.contentId, this.callbacks, this.parent);
     }
   }
 

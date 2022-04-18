@@ -120,7 +120,7 @@ class Dialogcards extends H5P.EventDispatcher {
       this.cardManager = new CardManager(managerParams, this.id, {
         onCardTurned: this.handleCardTurned,
         onNextCard: this.nextCard
-      });
+      }, this);
 
       this.createDOM(this.round === 0);
 
@@ -349,8 +349,9 @@ class Dialogcards extends H5P.EventDispatcher {
      * Handle card turned.
      *
      * @param {boolean} turned - True, if card is turned.
+     * @param {object} parent - parent object
      */
-    this.handleCardTurned = (turned) => {
+    this.handleCardTurned = (turned, parent) => {
       // const customEvent =H5P.externalDispatcher.createXAPIEventTemplate("consumed");
       // if (customEvent.data.statement.object) {
       //   customEvent.data.statement.object.definition["description"] = {
@@ -364,7 +365,7 @@ class Dialogcards extends H5P.EventDispatcher {
       //   this.trigger(customEvent);
       // }
 
-      const customEventInteract =H5P.externalDispatcher.createXAPIEventTemplate("interacted");
+      const customEventInteract = parent.createXAPIEventTemplate("interacted");
       if (customEventInteract.data.statement.object) {
         customEventInteract.data.statement.object.definition["description"] = {
           "en-US":"Dialog Cards Activity", //  this.contentData.metadata.title
@@ -373,8 +374,8 @@ class Dialogcards extends H5P.EventDispatcher {
           "en-US":"Dialog Cards Activity", //  this.contentData.metadata.title
         };
         customEventInteract.data.statement.object["objectType"] ="Activity";
-        customEventInteract.data.statement.object["id"] ="http://adlnet.gov/expapi/activities"
-        this.trigger(customEventInteract);
+        customEventInteract.data.statement.object["id"] ="http://adlnet.gov/expapi/activities";
+        parent.trigger(customEventInteract);
       }
 
       // var xAPIEvent = H5P.externalDispatcher.createXAPIEventTemplate("interacted");
@@ -388,7 +389,7 @@ class Dialogcards extends H5P.EventDispatcher {
           this.$retry.removeClass('h5p-dialogcards-disabled');
           this.truncateRetryButton();
 
-          const customEventComplete =H5P.externalDispatcher.createXAPIEventTemplate("completed");
+          const customEventComplete = parent.createXAPIEventTemplate("completed");
           if (customEventComplete.data.statement.object) {
             customEventComplete.data.statement.object.definition["description"] = {
               "en-US":"Dialog Cards Activity", //  this.contentData.metadata.title
@@ -397,8 +398,8 @@ class Dialogcards extends H5P.EventDispatcher {
               "en-US":"Dialog Cards Activity", //  this.contentData.metadata.title
             };
             customEventComplete.data.statement.object["objectType"] ="Activity";
-            customEventComplete.data.statement.object["id"] ="http://adlnet.gov/expapi/activities"
-            this.trigger(customEventComplete);
+            customEventComplete.data.statement.object["id"] ="http://adlnet.gov/expapi/activities";
+            parent.trigger(customEventComplete);
           }
         }
       }
@@ -953,5 +954,8 @@ Dialogcards.idCounter = 0;
 Dialogcards.SCALEINTERVAL = 0.2;
 Dialogcards.MAXSCALE = 16;
 Dialogcards.MINSCALE = 4;
+
+Dialogcards.prototype = Object.create(H5P.EventDispatcher.prototype);
+Dialogcards.prototype.constructor = Dialogcards;
 
 export default Dialogcards;
