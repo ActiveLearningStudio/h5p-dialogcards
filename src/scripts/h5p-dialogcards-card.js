@@ -106,8 +106,20 @@ class Card {
       if (card.imageAltText) {
         this.$image.attr('alt', card.imageAltText);
       }
-    }
-    else {
+
+      if (card.backimage !== undefined) {
+        this.backimage = card.backimage;
+      }
+    } else if (card.image === undefined && card.backimage !== undefined) {
+      this.justBackImage = true;
+      this.image = card.backimage;
+      this.$image = $('<img class="h5p-dialogcards-image" src="' + H5P.getPath(card.backimage.path, this.contentId) + '"/>');
+      this.$image.css('display', 'none');
+
+      if (card.imageAltText) {
+        this.$image.attr('alt', card.backImageAltText);
+      }
+    } else {
       this.$image = $('<div class="h5p-dialogcards-image"></div>');
     }
 
@@ -294,6 +306,19 @@ class Card {
       $ch.removeClass('h5p-dialogcards-collapse');
       this.changeText(turned ? this.getText() : this.getAnswer());
 
+      if (this.$image && this.backimage) {
+        const path = turned ? this.image.path : this.backimage.path;
+        this.$image.attr('src', '');
+        this.$image.attr('src', H5P.getPath(path, this.contentId));
+      }
+
+      if (this.$image && this.justBackImage) {
+        if (turned)
+          this.$image.css('display', 'none');
+        else
+          this.$image.css('display', 'block');
+      }
+
       if (turned) {
         $ch.find('.h5p-audio-inner').removeClass('hide');
       }
@@ -327,6 +352,10 @@ class Card {
 
       // Focus text
       this.$cardTextArea.focus();
+
+      setTimeout(() => {
+        this.parent.trigger('resize');
+      }, 200);
     }, 200);
   }
 

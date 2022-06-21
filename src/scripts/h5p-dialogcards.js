@@ -277,11 +277,12 @@ class Dialogcards extends H5P.EventDispatcher {
       const $currentCardContent = this.cards[this.currentCardId].getDOM().find('.h5p-dialogcards-card-content');
 
       this.params.dialogs.forEach(dialog => {
-        if (!dialog.image) {
+        if (!dialog.image && !dialog.backimage) {
           return;
         }
 
-        const imageHeight = dialog.image.height / dialog.image.width * $currentCardContent.get(0).getBoundingClientRect().width;
+        const mainImage = (dialog.image) ? dialog.image : dialog.backimage;
+        const imageHeight = mainImage.height / mainImage.width * $currentCardContent.get(0).getBoundingClientRect().width;
         if (imageHeight > height) {
           height = imageHeight;
         }
