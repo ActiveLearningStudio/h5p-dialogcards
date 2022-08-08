@@ -956,7 +956,4 @@ Dialogcards.SCALEINTERVAL = 0.2;
 Dialogcards.MAXSCALE = 16;
 Dialogcards.MINSCALE = 4;
 
-Dialogcards.prototype = Object.create(H5P.EventDispatcher.prototype);
-Dialogcards.prototype.constructor = Dialogcards;
-
 export default Dialogcards;
