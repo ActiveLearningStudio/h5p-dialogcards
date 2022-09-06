@@ -104,19 +104,22 @@ class Card {
       this.$image = $('<img class="h5p-dialogcards-image" src="' + H5P.getPath(card.image.path, this.contentId) + '"/>');
 
       if (card.imageAltText) {
+        this.image.imageAltText = card.imageAltText;
         this.$image.attr('alt', card.imageAltText);
       }
 
       if (card.backimage !== undefined) {
         this.backimage = card.backimage;
+        this.backimage.imageAltText = card.backImageAltText;
       }
     } else if (card.image === undefined && card.backimage !== undefined) {
       this.justBackImage = true;
       this.image = card.backimage;
+      this.image.imageAltText = card.backImageAltText;
       this.$image = $('<img class="h5p-dialogcards-image" src="' + H5P.getPath(card.backimage.path, this.contentId) + '"/>');
       this.$image.css('display', 'none');
 
-      if (card.imageAltText) {
+      if (card.backImageAltText) {
         this.$image.attr('alt', card.backImageAltText);
       }
     } else {
@@ -308,8 +311,10 @@ class Card {
 
       if (this.$image && this.backimage) {
         const path = turned ? this.image.path : this.backimage.path;
+        const alt = turned ? this.image.imageAltText : this.backimage.imageAltText;
         this.$image.attr('src', '');
         this.$image.attr('src', H5P.getPath(path, this.contentId));
+        this.$image.attr('alt', alt);
       }
 
       if (this.$image && this.justBackImage) {
