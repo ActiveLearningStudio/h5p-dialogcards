@@ -16,7 +16,8 @@
       ]
     },
     {
-      "label": "Task description"
+      "label": "Task description",
+      "default": ""
     },
     {
       "widgets": [
@@ -43,6 +44,13 @@
           },
           {
             "label": "Alternative text for the image"
+          },
+          {
+            "label": "Back Image",
+            "description": "Optional image for the back of the card."
+          },
+          {
+            "label": "Alternative text for the back image"
           },
           {
             "label": "Audio files"
